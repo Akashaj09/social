@@ -21,6 +21,15 @@ class HomeController extends Controller
 							->where("user_id", "=", Auth::id())
 							->orderBy("id", "DESC")
 							->first();
+		$peoplestofollow = DB::table("users")
+								->select("users.*", "user_profile_picture.image")
+								->join("user_profile_picture", "users.id", "=", "user_profile_picture.user_id")
+								->where("users.id", "!=", Auth::id())
+								->orderBy()
+								->groupBy()
+								->get();
+
+							
 		return view("home.index")->with(["profilepicture" => $profilepicture]);
 	}
 }

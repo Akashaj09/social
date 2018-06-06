@@ -17,4 +17,5 @@ Route::group(["middleware" => "auth"], function(){
 
 Route::group(["middleware" => "auth", "prefix" => "user"], function(){
 	Route::post("/changeprofilepicture", "Home\AdminController@changeprofilepicture");
+	Route::resource("/post", "Home\PostController", ['except' => ['index','create', 'edit']]);
 });

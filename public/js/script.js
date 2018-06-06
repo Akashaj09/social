@@ -167,3 +167,10 @@ $(window).on("resize", function() {
         $("#preview").addClass("img-responsive img-thumbnail");
     }
 }
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+$(document).ready(function(){
+    $('[data-toggles="tooltip"]').tooltip();   
+});

@@ -92,11 +92,46 @@
       </form>
       </div>
     </div>
+    <meta name="_token" content="{!! csrf_token() !!}" />
     <script src="{{ url("js/jquerysticky.min.js") }}"></script>
     <script src="js/jquery.scrollbar.min.js"></script>
     <script src="js/script.js"></script> 
+
     <script type="text/javascript">
 
+      $("#postform").submit(function(event) {
+        event.preventDefault();
+        $.growl.notice({title: "Processing!!", message: "We are processing your request" });
+        var formData = new FormData();
+        formData.append('postimage', $('#postimage')[0].files[0]);
+        formData.append('description', $("#postdescription").val());
+        $.ajax({
+          headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+          url: '{{ url("user/post") }}',
+          type: 'POST',
+          data: formData,
+          processData: false, 
+          contentType: false, 
+          success: function(response){
+            if(response.status){
+              $.growl.notice({ title: "Success!!", message: response.message });
+              $.growl.notice({ title: "Processing!!", message: "Now we redirecting" });
+              setTimeout(function(){
+                location.reload();
+              },1000);
+            }
+          }
+        }).fail(function(response) {
+          $.each(response.responseJSON.errors, function(index, val) {
+            $.growl.error({ title: response.responseJSON.message, message: val[0] });
+          });
+        });
+      }); 
+    </script>
+
+
+    {{-- changing profile picture --}}
+    <script type="text/javascript">
       $("#profileimagechange").submit(function(event) {
         event.preventDefault();
         $.growl.notice({title: "Processing!!", message: "We are processing your request" });
@@ -128,5 +163,6 @@
           });
       });
     </script>
+   {{--  end of changing profile picture --}}
   </body>
 </html>

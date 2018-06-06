@@ -45,7 +45,7 @@
 							$.growl.notice({title: "Success!!", message: response.message });
 							$.growl.notice({title: "Processing!!", message: "Now we redirecting..." });
 							setTimeout(function(){
-								alert("Redirected");
+								window.location = "/home";
 							}, 1000);
 						}
 					}else{
