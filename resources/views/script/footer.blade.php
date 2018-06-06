@@ -63,10 +63,10 @@
         </footer>
     
     <!--preloader-->
-    <div id="spinner-wrapper">
+   {{--  <div id="spinner-wrapper">
       <div class="spinner"></div>
     </div>
-
+ --}}
     <div id="profileImage" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <form method="post" id="profileimagechange" enctype="multipart/form-data">

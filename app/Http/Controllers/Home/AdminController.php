@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User\ProfilePicture;
 use Auth;
+use App\User\Post;
 
 class AdminController extends Controller
 {
@@ -23,9 +24,10 @@ class AdminController extends Controller
     		$name = $id.".".$ext;
     		$allowed = array("jpg", "jpeg", "png");
     		if (in_array(strtolower($ext), $allowed)) {
-    			$file->move(base_path()."/public/profile", $name);
+    			$file->move(base_path()."/public/postimage", $name);
     			$data = ["user_id" => Auth::id(), "image" => $name];
     			ProfilePicture::create($data);
+                Post::create([ "description" => "", "user_id" => Auth::id(), "images" => $name]);
     			return response()->json(["status" => true, "message" => "Profile picture updated"]);
     		}else{
     			return response()->json(["status" => false, "message" => "Image must be in jpg, jpeg or png format"]);
