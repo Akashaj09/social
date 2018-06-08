@@ -65,6 +65,14 @@ class PostController extends Controller
   
     public function destroy(Post $post)
     {
-        //
+        if($post->id == Auth::id()){
+        if($post->image == "no image"){
+            
+                $post->delete();
+            }else{
+
+            }
+        }
+        return response()->json(["akash" => "Akash"]);
     }
 }

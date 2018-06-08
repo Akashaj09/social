@@ -17,7 +17,7 @@ class CreateLiksTable extends Migration
             $table->increments('id');
             $table->integer("post_id");
             $table->integer("liker_id");
-            $table->integer("status");
+            $table->integer("flag");
             $table->timestamps();
         });
     }

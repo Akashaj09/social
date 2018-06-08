@@ -1,4 +1,9 @@
 @include("script.head")
+<style type="text/css" media="screen">
+  .text-grey{
+    color: #708090;
+  }
+</style>
 <script type="text/javascript">
   function getImage(id) {
     $.ajax({

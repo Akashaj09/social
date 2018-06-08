@@ -14,11 +14,13 @@ Route::group(["middleware" => "auth"], function(){
 	Route::get("/home", "Home\HomeController@index");
 	Route::get("/logout", "Home\AdminController@logout");
 	Route::get("/people", "Home\HomeController@people");
+	Route::get("/likscounter/{id}", "Home\LiksController@likscounter");
 });
 
 Route::group(["middleware" => "auth", "prefix" => "user"], function(){
 	Route::post("/changeprofilepicture", "Home\AdminController@changeprofilepicture");
 	Route::get("/getUserimage/{id}", "Home\HomeController@images");
 	Route::post("/followuser", "Home\FollowController@follow");
+	Route::post("/likepost", "Home\LiksController@likepost");
 	Route::resource("/post", "Home\PostController", ['except' => ['index','create', 'edit']]);
 });
