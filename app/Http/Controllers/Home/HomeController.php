@@ -39,10 +39,9 @@ class HomeController extends Controller
 							->where("status", "!=", "0")
 							->count();
 		$posts = DB::table("post")
-					->select("post.*", "users.firstname", "users.lastname", "user_profile_picture.image")
+					->select("post.*", "users.firstname", "users.lastname")
 					->join("following", "post.user_id", "=", "following.following_id")
 					->join("users", "users.id", "=", "post.user_id")
-					->join("user_profile_picture", "post.user_id", "=", "user_profile_picture.user_id")
 					->where("following.user_id", "=", Auth::id())
 					->orWhere("post.user_id", "=", Auth::id())
 					->orderBy("post.id", "DESC")

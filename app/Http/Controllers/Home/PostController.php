@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Image;
 use Auth;
+use File;
+use DB;
 
 
 class PostController extends Controller
@@ -65,14 +67,22 @@ class PostController extends Controller
   
     public function destroy(Post $post)
     {
-        if($post->id == Auth::id()){
-        if($post->image == "no image"){
-            
+        if($post->user_id == Auth::id()){
+            if($post->images == "no image"){
                 $post->delete();
+                return response()->json(["status", true, "message" => "Post deleted"]);
             }else{
-
+                if(strpos($post->images,  Auth::user()->firstname) !== false){
+                    DB::table("user_profile_picture")
+                        ->where("image", "=", $post->images)
+                        ->delete();
+                }
+                File::delete("postimage/$post->images");
+                $post->delete();
+                return response()->json(["status", true, "message" => "Post deleted"]);
             }
+        }else{
+            return response()->json(["status", false, "message" => "You are not authorized to delete this post"]);
         }
-        return response()->json(["akash" => "Akash"]);
     }
 }
