@@ -42,6 +42,12 @@ class UserRegisterController extends Controller
                 ]);
             new MailController($userdata, $message);
 
+            DB::table("user_profile_picture")->insert([
+                'user_id' => $result->id,
+                'image' => 'people.png',
+                'created_at' => date('Y-m-d h:i:s')
+            ]);
+
 
     		return response()->json(["success" => "Account created successfully", "status" => true]);
     	}else{

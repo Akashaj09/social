@@ -44,10 +44,10 @@
               @else
                 <img src="{{ url("postimage/people.png") }}" alt="" class="profile-photo" />  
               @endif
-                <h5><a href="#" class="text-white">{{ Auth::user()->firstname }}&nbsp; {{ Auth::user()->lastname }}</a></h5>
+                <h5><a href="#" class="text-white">{{ Auth::user()->firstname }}</a></h5>
                 <a href="#" class="text-white"><i class="ion ion-android-person-add"></i> {{ $followercount }} followers</a><br>
                 <a href="#" class="text-white"><i class="ion ion-android-person-add"></i> {{ $followingcount }} follwing</a>
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#profileImage"  data-toggles="tooltip" title="Change profile picture">Change image</button>
+                <button class="btn btn-primary btn-block btn-sm" data-toggle="modal" data-target="#profileImage"  data-toggles="tooltip" title="Change profile picture">Change image</button>
             </div><!--profile card ends-->
             <ul class="nav-news-feed">
               <li><i class="icon ion-ios-paper"></i><div><a href="{{ url("/") }}">My Newsfeed</a></div></li>
@@ -73,7 +73,9 @@
             </div> --}}<!--chat block ends-->
           </div>
           <div class="col-md-7">
+            
 
+            @if(!isset($post))
             <!-- Post Create Box
             ================================================= -->
             <div class="create-post"  style="padding: 0px 10px 10px 10px;">
@@ -109,6 +111,7 @@
                 </form>
               </div>
             </div><!-- Post Create Box End-->
+            @endif
             @yield('content')
           </div>
 

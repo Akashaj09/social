@@ -80,6 +80,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
+        $.growl.notice({title: "Processing!!", message: "Still processing" });
         $.ajax({
             url: '{{ url("/user/register") }}',
             type: 'POST',

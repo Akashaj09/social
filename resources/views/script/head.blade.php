@@ -35,7 +35,10 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url("/") }}"><img src="images/logo.png" alt="logo" /></a>
+        <a class="navbar-brand" href="{{ url("/") }}">
+          <span class="text-white">Social</span>
+          {{-- <img src="{{ url("images/logo.png") }}" alt="logo" /> --}}
+        </a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -72,7 +75,7 @@
             </ul>
           </li>-->
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle pages" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span><img src="images/down-arrow.png" alt="" /></span></a>
+            <a href="#" class="dropdown-toggle pages" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span><i class="fa fa-angle-double-down"></i></span></a>
             <ul class="dropdown-menu page-list">
               <li><a href="{{ url("/logout") }}">Log out</a></li>
             </ul>

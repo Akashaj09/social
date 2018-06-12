@@ -19,27 +19,18 @@
     });
     
   }
-
-  function getComments(id){
-    $.ajax({
-      url: '{{ url("getComments") }}/'+id,
-      type: 'get',
-      success: function (response) {
-        $(".loadimage").remove();
-        $.each(response.comments, function(index, val) {
-           $("#comment"+id).append(
-            '<div class="post-comment">'+
-              '<img src="{{ url("/") }}/postimage/'+val["image"]+'" alt="" class="profile-photo-sm" />'+
-              '<p><a href="#" class="profile-link">'+val["firstname"]+'</a> '+val["comments"]+'</p>'
-            +'</div>'
-          );
-        });
-      }
-    })
-    .fail(function() {
-      
-    });
-    
+  function getprofilephoto (id, postid) {
+     $.ajax({
+       url: '{{ url("/getprofilepicture") }}/'+id,
+       type: 'GET',
+       success: function(response){
+        $("#profileimage"+postid).attr('src', '{{ url("/postimage") }}/'+response.image);
+        $("#profileimages"+postid).attr('src', '{{ url("/postimage") }}/'+response.image);
+       }
+     }).fail(function() {
+       console.log("error");
+     });
+     
   }
 </script>  
 @foreach($posts as $post)
@@ -48,7 +39,8 @@
     countLiks('{{ $post->id }}');
   </script>     
   <script type="text/javascript">
-    getComments('{{ $post->id }}');
+
+    getprofilephoto('{{ $post->user_id }}', '{{ $post->id }}');
   </script>   
 <div class="post-content"  id="post{{ $post->id }}">
 
@@ -82,7 +74,7 @@
     <img src="{{ url("/postimage/$post->images") }}" alt="post-image" class="img-responsive post-image" />
   @endif
   <div class="post-container">
-    <img src="{{-- {{ url("/postimage/$post->image") }} --}}" alt="user" class="profile-photo-md pull-left" />
+    <img src="{{-- {{ url("/postimage/$post->image") }} --}}" id="profileimage{{ $post->id }}" alt="user" class="profile-photo-md pull-left" />
     <div class="post-detail">
       <div class="user-info">
         <h5><a href="#" class="profile-link">{{ $post->firstname }} {{ $post->lastname }}</a> <span class="following"></span></h5>
@@ -107,16 +99,47 @@
           <p>{{ $post->description }}</p>
         @endif
       </div>
+        <a href="{{ url("comments/$post->id") }}" title="">See all comments</a>
       <div class="post-comment">
-        <img src="{{-- {{ url("/postimage/$post->image") }} --}}" alt="" class="profile-photo-sm" />
-        <input type="text" class="form-control" id="comnts{{ $post->id }}" placeholder="Post a comment" onkeyup="postComment('{{ $post->id }}')">
-      </div>
-      <div align="center" id="comment{{ $post->id }}">
-        <img src="{{ url("image/load.gif") }}" height="40px;" class="loadimage" />
+        <img id="profileimages{{ $post->id }}" alt="" class="profile-photo-sm" />
+        <form method="post" action="#" id="commentForm{{ $post->id }}" style="width: 100%">
+          <input type="text" class="form-control" id="comnts{{ $post->id }}" placeholder="Post a comment" >
+        </form>
       </div>
     </div>
   </div>
+  <div class="col-md-12" align="center">
+    {{ $posts->links() }}
+  </div>
 </div>
+
+<script type="text/javascript">
+  $("#commentForm{{ $post->id }}").submit(function(event) {
+    event.preventDefault();
+    var comments = $("#comnts{{ $post->id }}").val();
+      if(comments.length > 0){
+        $.ajax({
+          headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+          url: '{{ url("postcomments") }}',
+          type: 'post',
+          data: {comments: comments, post_id: '{{ $post->id }}'},
+          success: function(response){
+            if(response.status){
+              $("#commentForm{{ $post->id }}")[0].reset();
+              window.location = "comments/{{ $post->id }}";
+            }else{
+              $.growl.error({ title: "Error!!", message: "Something went wrong please try again" });
+            }
+          }
+        }).fail(function() {
+          $.growl.error({ title: "Error!!", message: "Something went wrong please try again" });
+        });
+      }else{
+        $.growl.error({ title: "Error!!", message: "Comment can not be null" });
+      }
+  });
+</script>
+
 @endforeach
 
 <script type="text/javascript">
@@ -159,7 +182,7 @@
       type: 'DELETE',
       success: function(response){
         if(response.status){
-          $("#post"+id).html("");
+          location.reload();
         }else{
           $("#post"+id).html(htmls);
         }
@@ -173,35 +196,10 @@
 </script>
 
 <script type="text/javascript">
-  function postComment(id) {
+  function postComment(id, event) {
     var key = event.which;
     if(key == 13){
-      var comments = $("#comnts"+id).val();
-      if(comments.length > 0){
-        $.ajax({
-          headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-          url: '{{ url("postcomments") }}',
-          type: 'post',
-          data: {comments: comments, post_id: id},
-          success: function(response){
-            if(response.status){
-              $("#comnts"+id).val("");
-              $("#comment"+id).prepend(
-                '<div class="post-comment">'+
-                  '<img src="{{ url("/") }}/postimage/'+response.userimage["image"]+'" alt="" class="profile-photo-sm" />'+
-                  '<p><a href="#" class="profile-link">{{ Auth::user()->firstname }}</a> '+comments+'</p>'
-                +'</div>'
-                );
-            }else{
-
-            }
-          }
-        }).fail(function() {
-          $.growl.error({ title: "Error!!", message: "Something went wrong please try again" });
-        });
-      }else{
-        $.growl.error({ title: "Error!!", message: "Comment can not be null" });
-      }
+      
       
     }   
   }

@@ -13,6 +13,6 @@ class Post extends Model
     protected $table = "post";
 
      public function comments() {
-    	return $this->hasMany(Reviews::class);
+    	return $this->hasMany(Comment::class);
     }
 }

@@ -23,7 +23,6 @@ class HomeController extends Controller
 		$profilepicture = DB::table("user_profile_picture")
 							->where("user_id", "=", Auth::id())
 							->orderBy("id", "DESC")
-							->limit(15)
 							->first();
 		$peoplestofollow = DB::select("SELECT * FROM `users` WHERE `users`.`id` NOT IN (SELECT `following_id` FROM `following` WHERE `following`.`status`=1 AND `user_id`='".Auth::id()."') AND `users`.`id`!='".Auth::id()."' ORDER BY RAND() LIMIT 9");
 
@@ -42,11 +41,12 @@ class HomeController extends Controller
 					->select("post.*", "users.firstname", "users.lastname")
 					->join("following", "post.user_id", "=", "following.following_id")
 					->join("users", "users.id", "=", "post.user_id")
+					
 					->where("following.user_id", "=", Auth::id())
 					->orWhere("post.user_id", "=", Auth::id())
 					->orderBy("post.id", "DESC")
 					->groupBy("post.id")
-					->get();
+					->paginate(40);
 							
 		return view("home.newsfeed")->with(["profilepicture" => $profilepicture, "peoplestofollow" => $peoplestofollow, "followercount" => $followercount, "followingcount" => $followingcount, "posts" => $posts]);
 	}

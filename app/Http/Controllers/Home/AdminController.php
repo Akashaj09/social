@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User\ProfilePicture;
 use Auth;
 use App\User\Post;
+use DB;
 
 class AdminController extends Controller
 {
@@ -35,5 +36,14 @@ class AdminController extends Controller
     	}else{
     		return response()->json(["status" => false, "message" => "An image is required"]);
     	}
+    }
+
+    public function profilepicture($user)
+    {
+        $images = DB::table("user_profile_picture")
+                        ->where("user_id", "=", $user)
+                        ->orderBy("id", "DESC")
+                        ->first();
+        return response()->json(["image" => $images->image]);
     }
 }

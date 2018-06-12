@@ -17,6 +17,8 @@ Route::group(["middleware" => "auth"], function(){
 	Route::get("/likscounter/{id}", "Home\LiksController@likscounter");
 	Route::get("/getComments/{id}", "Home\CommentsController@getComments");
 	Route::post("/postcomments", "Home\CommentsController@postcomments");
+	Route::get("/getprofilepicture/{user}", "Home\AdminController@profilepicture");
+	Route::get("/comments/{id}", "Home\CommentsController@allcomments");
 });
 
 Route::group(["middleware" => "auth", "prefix" => "user"], function(){
